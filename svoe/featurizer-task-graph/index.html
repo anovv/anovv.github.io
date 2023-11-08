@@ -623,6 +623,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -686,6 +706,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -740,6 +780,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -858,15 +918,17 @@ relatively to all other features by a time period specified by user, this way we
 to be used as an input for predictive ML models training/validation/testing steps.</p>
 <p>Config options:</p>
 <ul>
-<li>name or index of a feature to mark as a label</li>
+<li>
+<p>name or index of a feature to mark as a label
+<div class="highlight"><pre><span></span><code>label_feature: 0
+</code></pre></div></p>
+</li>
+<li>
+<p>how far ahead we want to shift labeled timeseries to be used as predictor targets
+<div class="highlight"><pre><span></span><code>label_lookahead: &#39;10s&#39;
+</code></pre></div></p>
+</li>
 </ul>
-<pre><code>label_feature: 0
-</code></pre>
-<ul>
-<li>how far ahead we want to shift labeled timeseries to be used as predictor targets</li>
-</ul>
-<pre><code>label_lookahead: '10s'
-</code></pre>
 <h2 id="point-in-time-joins">Point-in-time Joins</h2>
 <p>Since features may have different time granularity and/or irregular frequencies, in order to produce unified 
 dataframe with multiple features we need to perform a join operation. The framework automatically builds join tasks
@@ -875,8 +937,8 @@ and takes care of updating resulting graph to produce unified dataframe (see pic
 <h2 id="execution">Execution</h2>
 <p>After Task Graph is build, the framework submits it to Ray cluster for execution. Sub-graphs are submitted in batches
 defined by <code>parallelism</code> parameter:</p>
-<pre><code>Featurizer.run(config=&lt;config&gt;, ray_address=&lt;ray_address&gt;, parallelism=&lt;parallelism&gt;)
-</code></pre>
+<div class="highlight"><pre><span></span><code>Featurizer.run(config=&lt;config&gt;, ray_address=&lt;ray_address&gt;, parallelism=&lt;parallelism&gt;)
+</code></pre></div>
 <p>Ray automatically takes care of executing them amongst workers. In order to effectively 
 see speed-up from horizontal scaling users need to make sure that the cluster has more cores than <code>parallelism</code>.</p>
 <p>Oncec execution is finished, the resulting dataframes are stored in cluster's distributed memory and can be accessed via

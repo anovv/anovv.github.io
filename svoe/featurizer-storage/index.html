@@ -623,6 +623,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -686,6 +706,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -740,6 +780,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -846,28 +906,30 @@ as a pandas DataFrame when loaded in memory or as a gzip-compressed parquet file
 <ul>
 <li><strong>Block</strong></li>
 </ul>
-<p>Single block of data, currently a simple pandas dataframe</p>
-<pre><code>Block = pd.DataFrame
-</code></pre>
+<p>Single block of data, currently a simple pandas dataframe
+<div class="highlight"><pre><span></span><code>Block = pd.DataFrame
+</code></pre></div></p>
 <ul>
 <li><strong>BlockRange</strong></li>
 </ul>
 <p>Represents a range of consecutive timestamp-sorted blocks. These are treated as a single range that contains no gaps. 
-Blocks are considered consecutive if time difference between them is no more than user-defined delta.</p>
-<pre><code>BlockRange = List[Block]
-</code></pre>
+Blocks are considered consecutive if time difference between them is no more than user-defined delta.
+<div class="highlight"><pre><span></span><code>BlockRange = List[Block]
+</code></pre></div></p>
 <ul>
-<li><strong>BlockMeta</strong>
-Represents block metadata: feature/data source name, key or id, time range, size, etc.</li>
+<li>
+<p><strong>BlockMeta</strong>
+Represents block metadata: feature/data source name, key or id, time range, size, etc.
+<div class="highlight"><pre><span></span><code>BlockMeta = Dict
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>BlockRangeMeta</strong>
+Similarly to <em>BlockRange</em>, represents metadata for consecutive blocks.
+<div class="highlight"><pre><span></span><code>BlockRangeMeta = List[BlockMeta]
+</code></pre></div></p>
+</li>
 </ul>
-<pre><code>BlockMeta = Dict
-</code></pre>
-<ul>
-<li><strong>BlockRangeMeta</strong>
-Similarly to <em>BlockRange</em>, represents metadata for consecutive blocks.</li>
-</ul>
-<pre><code>BlockRangeMeta = List[BlockMeta]
-</code></pre>
 <h2 id="sql-tables">SQL Tables</h2>
 <p>Metadata about features/data sources and feature/data source blocks is stored in 4 tables</p>
 <ul>
@@ -879,7 +941,7 @@ Similarly to <em>BlockRange</em>, represents metadata for consecutive blocks.</l
 <h2 id="data-store-adapters">Data Store Adapters</h2>
 <p>Featurizer provides <code>DataStoreAdapter</code> class to implement custom read/write operations for block storage.
 Users are able to extend this class with their own logic.</p>
-<pre><code>class DataStoreAdapter:
+<div class="highlight"><pre><span></span><code>class DataStoreAdapter:
 
     def load_df(self, path: str, **kwargs) -&gt; pd.DataFrame:
         raise NotImplementedError
@@ -892,7 +954,7 @@ Users are able to extend this class with their own logic.</p>
 
     def make_data_source_block_path(self, item: DataSourceBlockMetadata) -&gt; str:
         raise NotImplementedError
-</code></pre>
+</code></pre></div>
 <p>Featurizer includes implementation two data store adapters:</p>
 <ul>
 <li><code>LocalDataStoreAdapter</code>

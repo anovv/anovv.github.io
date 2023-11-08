@@ -595,6 +595,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -658,6 +678,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -712,6 +752,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -786,7 +846,7 @@ of events which framework treats as an input to our feature calculation pipeline
 plays a role of a terminal node (a leaf) in a <code>FeatureDefinition</code>/<code>Feature</code> tree. Unlike <code>FeatureDefinition</code>, <code>DataSourceDefinition</code> 
 does not have any dependencies and does not perform any feature calculations - the purpose of this class is to hold metadata about
 event schema, possible preprocessing steps and other info. Let's take a look at an example <code>DataSourceDefinition</code></p>
-<pre><code>class MyDataSourceDefinition(DataSourceDefinition):
+<div class="highlight"><pre><span></span><code>class MyDataSourceDefinition(DataSourceDefinition):
 
     @classmethod
     def event_schema(cls) -&gt; EventSchema:
@@ -798,7 +858,7 @@ event schema, possible preprocessing steps and other info. Let's take a look at 
         # Any preprocessing logic to get a sequence of EventSchema-like
         # records in a form of a DataFrame from raw data (raw_df)
         raise NotImplemented
-</code></pre>
+</code></pre></div>
 <p>See CryptotickL2BookIncrementalData for an example of a data source representing 
 incremental order book updates from Cryptotick data provider.</p>
 

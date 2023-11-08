@@ -64,11 +64,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#quick-start" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -298,17 +293,6 @@
       
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Quick start
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -318,30 +302,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick start
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -591,6 +551,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -645,6 +625,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -717,6 +717,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -742,21 +762,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick start
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -775,12 +780,210 @@
 
   <h1>Quick start</h1>
 
-<h2 id="quick-start">Quick start</h2>
+<p>As an example, here is a simple 3 step tutorial to build a simple <strong><a href="https://en.wikipedia.org/wiki/Mid_price">mid-price</a></strong> prediction model based on past price and volatility. </p>
 <ul>
-<li><code>svoe featurizer</code> - Featurizer.</li>
-<li><code>svoe trainer</code> - Trainer.</li>
-<li><code>svoe backtester</code> - Backtester.</li>
-<li><code>svoe -h</code> - Print help message and exit.</li>
+<li>
+<p>Run <strong><em><a href="https://anovv.github.io/svoe/featurizer-overview/">Featurizer</a></em></strong> to construct mid-price and volatility features from partial order book updates, 5 second lookahead label as prediction target, using 1 second granularity data </p>
+<ul>
+<li>Define <code>featurizer-config.yaml</code>
+  <div class="highlight"><pre><span></span><code>start_date: &#39;2023-02-01 10:00:00&#39;
+end_date: &#39;2023-02-01 11:00:00&#39;
+label_feature_index: 0
+label_lookahead: &#39;5s&#39;
+features_to_store: [0, 1]
+feature_configs:
+  - feature_definition: price.mid_price_fd.MidPriceFD
+    name: mid_price
+    params:
+      data_source: &amp;id001
+        - exchange: BINANCE
+          instrument_type: spot
+          symbol: BTC-USDT
+      feature:
+        sampling: 1s
+  - feature_definition: volatility.volatility_stddev_fd.VolatilityStddevFD
+    params
+      data_source: *id001
+      feature:
+        sampling: 1s
+</code></pre></div>
+  See <a href="https://github.com/anovv/svoe/blob/main/featurizer/features/definitions/price/mid_price_fd/mid_price_fd.py">MidPriceFD</a> and <a href="https://github.com/anovv/svoe/blob/main/featurizer/features/definitions/volatility/volatility_stddev_fd/volatility_stddev_fd.py">VolatilityStddevFD</a> for implementation details</li>
+<li>
+<p>Run Featurizer</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">CLI</label><label for="__tabbed_1_2">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer run &lt;path_to_config&gt; --ray-address &lt;addr&gt; --parallelism &lt;num-workers&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Featurizer.run(path=&lt;path_to_config&gt;, ray_address=&lt;addr&gt;, parallelism=&lt;num_workers&gt;)
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Once calculation is finished, load sampled <code>FeatureLabelSet</code> dataframe to your local client</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer get-data --every-n &lt;every_nth_row&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>This produces
+      <div class="highlight"><pre><span></span><code>      timestamp  receipt_timestamp  label_mid_price-mid_price  mid_price-mid_price  feature_VolatilityStddevFD_62271b09-volatility
+0     1.675234e+09       1.675234e+09                  23084.800            23084.435                                        0.000547
+1     1.675234e+09       1.675234e+09                  23083.760            23084.355                                        0.040003
+2     1.675234e+09       1.675234e+09                  23083.505            23084.635                                        0.117757
+3     1.675234e+09       1.675234e+09                  23084.610            23085.020                                        0.257091
+4     1.675234e+09       1.675234e+09                  23084.725            23084.800                                        0.242034
+...            ...                ...                        ...                  ...                                             ...
+</code></pre></div></p>
+</li>
+<li>
+<p>We can also visualize the results</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer plot --every-n &lt;every_nth_row&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li>
+<p>Once we have our <code>FeatureLabelSet</code> calculated and loaded in cluster memory, let's use <strong><em><a href="https://anovv.github.io/svoe/trainer-overview/">Trainer</a></em></strong> to train XGBoost model to predict mid-price 5 seconds ahead, validate the model, tune hyperparams and pick best model</p>
+<ul>
+<li>Define config
+    <div class="highlight"><pre><span></span><code>xgboost:
+  params:
+    tree_method: &#39;approx&#39;
+    objective: &#39;reg:linear&#39;
+    eval_metric: [ &#39;logloss&#39;, &#39;error&#39; ]
+  num_boost_rounds: 10
+  train_valid_test_split: [0.5, 0.3]
+num_workers: 3
+tuner_config:
+  param_space:
+    params:
+      max_depth:
+        randint:
+          lower: 2
+          upper: 8
+      min_child_weight:
+        randint:
+          lower: 1
+          upper: 10
+  num_samples: 8
+  metric: &#39;train-logloss&#39;
+  mode: &#39;min&#39;
+max_concurrent_trials: 3
+</code></pre></div></li>
+<li>
+<p>Run Trainer</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">CLI</label><label for="__tabbed_4_2">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe trainer run --config-path &lt;config-path&gt; --ray-address &lt;addr&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>config = TrainerConfig.load_config(config_path)
+trainer_manager = TrainerManager(config=config, ray_address=ray_address)
+trainer_manager.run(trainer_run_id=&#39;sample-run-id&#39;, tags={})
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Visualize predictions</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe trainer predictions --model-uri &lt;model-uri&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Select best model</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">CLI</label><label for="__tabbed_6_2">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe trainer best-model --metric-name valid-logloss --mode min
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>best-model-uri = mlflow_client.get_best_checkpoint_uri(metric_name=metric_name, experiment_name=experiment_name, mode=mode)
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li>
+<p>Once we have our best model, we can plug it in our <code>BaseStrategy</code> derived class and run <strong><em><a href="https://anovv.github.io/svoe/backtester-overview/">Backtester</a></em></strong></p>
+<ul>
+<li>
+<p>Define config
+  <div class="highlight"><pre><span></span><code>featurizer_config_path: featurizer-config.yaml
+portfolio_config: &lt;portfolio_config&gt;
+inference_config:
+  model_uri: &lt;your-best-model-uri&gt;
+  predictor_class_name: &#39;XGBoostPredictor&#39;
+  num_replicas: &lt;number-of-predictor-replicas&gt; 
+tradable_instruments_params:
+- exchange: &#39;BINANCE&#39;
+  instrument_type: &#39;spot&#39;
+  symbol: &#39;BTC-USDT&#39;
+strategy_class_name: &#39;backtester.strategy.ml_strategy.MLStrategy&#39;
+strategy_params:
+  buy_delta: 0
+  sell_delta: 0
+</code></pre></div>
+See <a href="https://github.com/anovv/svoe/blob/main/backtester/strategy/ml_strategy.py">MLStrategy</a> for example implementation</p>
+</li>
+<li>
+<p>Run Backtester</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">CLI</label><label for="__tabbed_7_2">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe backtester run --config-path &lt;config-path&gt; --ray-address &lt;addr&gt; --num-workers &lt;num-workers&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>config = BacktesterConfig.load_config(config_path)
+backtester = Backtester.from_config(config)
+backtester.run_remotely(ray_address=ray_address, num_workers=num_workers)
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<p>This will run a distributed event-driven backtest using features and models defined earlier</p>
+<ul>
+<li>
+<p>Get statistics with </p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>stats = backtester.get_stats()
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</li>
 </ul>
 
 

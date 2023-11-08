@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../featurizer-quick-start/">
+        <link rel="prev" href="../featurizer-synthetic-data-sources/">
       
       
-        <link rel="next" href="../featurizer-data-source-definitions/">
+        <link rel="next" href="../trainer-overview/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Features and Feature Definitions - SVOE</title>
+        <title>Configuration - SVOE</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#features-and-feature-definitions" class="md-skip">
+        <a href="#configuration" class="md-skip">
           Skip to content
         </a>
       
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Features and Feature Definitions
+              Configuration
             
           </span>
         </div>
@@ -412,29 +412,9 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Features and Feature Definitions
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../featurizer-feature-definition/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -443,47 +423,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#featuredefinition-overview" class="md-nav__link">
-    FeatureDefinition overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#defining-parameters-feature_params-and-data_params" class="md-nav__link">
-    Defining parameters (feature_params and data_params)
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -613,9 +552,27 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../featurizer-configuration/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -624,6 +581,31 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -819,8 +801,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -829,22 +809,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#featuredefinition-overview" class="md-nav__link">
-    FeatureDefinition overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#defining-parameters-feature_params-and-data_params" class="md-nav__link">
-    Defining parameters (feature_params and data_params)
+  <a href="#configuration" class="md-nav__link">
+    Configuration
   </a>
   
 </li>
@@ -867,73 +833,9 @@
   
 
 
-<h1 id="features-and-feature-definitions">Features and Feature Definitions</h1>
-<h2 id="overview">Overview</h2>
-<p><strong>Feature</strong> is defined as an independent time based process, a set of timestamped events with identical schemas and contextual meaning,
-which in the context of our framework are represented either as a real-time stream of events (in case of real-time processing) or
-as a sequence of recorded events, stored as a (possibly distributed) dataframe (in case of historical/batch processing)</p>
-<p><strong>Feature Definition</strong> is an abstraction to define a blueprint for a time-series based
-feature in a modular way. In this contex, you can view a separate feature as a result of applying feature-sepicfic
-params to feature definition, i.e. <code>Feature = FeatureDefinition + params</code></p>
-<p>In code, these abstractions are represented as <code>Feature</code> and <code>FeatureDefinition</code> classes. Users are not supposed to 
-construct <code>Feature</code> objects directly and are expected to either use existing feature definitions or to implement their own
-by subclassing <code>FeatureDefinition</code>.</p>
-<h2 id="featuredefinition-overview">FeatureDefinition overview</h2>
-<p><code>FeatureDefinition</code>  is a base class for all custom feature definitions. To implement a new feature definition, user
-must subclass it and implement key methods. Here is an example</p>
-<div class="highlight"><pre><span></span><code>class MyFeatureDefinitionFD(FeatureDefinition):
+  <h1>Configuration</h1>
 
-    @classmethod
-    def event_schema(cls) -&gt; EventSchema:
-        # This method defines schema of the event
-        raise NotImplemented
-
-    @classmethod
-    def stream(
-        cls,
-        dep_upstreams: Dict[&#39;Feature&#39;, Stream],
-        feature_params: Dict
-    ) -&gt; Union[Stream, Tuple[Stream, Any]]:
-        # Contains logic to compute events for this feature based on upstream
-        # dependencies and user-provided params.
-        # Uses Streamz library for declarative stream processing API
-        raise NotImplemented
-
-    @classmethod
-    def dep_upstream_schema(
-        cls, 
-        dep_schema: str = Optional[None]
-    ) -&gt; List[Union[str, Type[DataDefinition]]]:
-        # Specifies upstream dependencies for this FeatureDefinition as a list
-        # of DataDefinition&#39;s
-        raise NotImplemented
-
-    @classmethod
-    def group_dep_ranges(
-        cls,
-        feature: Feature,
-        dep_ranges: Dict[Feature, List[BlockMeta]]
-    ) -&gt; IntervalDict:
-        # Logic to group dependant input data (dep_ranges) into atomic blocks 
-        # for parallel bulk processing of each group. The most basic case is 
-        # identity_grouping(...): newly produced data blocks depend only on 
-        # the current block (i.e. simple map operation)
-        # For more complicated example, consider feature with 1 dependency, 
-        # which produces window-aggregated calculations: here, for each new 
-        # data block, we need to group all the dependant blocks which fall 
-        # into that window (this is implemented in windowed_grouping(...) method)
-        # There are other more complicated cases, for example time buckets of 
-        # fixed lengths (for OHLCV as an example), and custom groupings based
-        # on data blocks content (see L2SnapshotFD as an example)
-        raise NotImplemented
-</code></pre></div>
-<p>As can be seen from the example above, <code>FeatureDefintion</code> class describes a tree-like structure,
-where the root is the current <code>FeatureDefintion</code> and the leafs are <code>DataSourceDefinition</code> classes which
-produce all the dependent features. Similarly, when framework builds <code>Feature</code> objects, each object is a
-tree-like structure, uniquely identified by it's dependencies and parameters (see <code>Feature</code> class for more info).</p>
-<p>For more examples please see examples section</p>
-<h2 id="defining-parameters-feature_params-and-data_params">Defining parameters (feature_params and data_params)</h2>
-<p>WIP</p>
+<h2 id="configuration">Configuration</h2>
 
 
 

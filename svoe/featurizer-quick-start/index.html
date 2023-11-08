@@ -558,6 +558,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -612,6 +632,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -684,6 +724,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -728,58 +788,98 @@
 
 
 <h1 id="featurizer-quick-start">Featurizer Quick Start</h1>
+<p>Featurizer helps creating distributed <code>FeatureLabelSet</code> dataframes from <a href="">Feature Definitions</a> to be used for analysis, ML training
+and real-time streaming.</p>
+<p>Here is an example to construct <a href="https://en.wikipedia.org/wiki/Mid_price">mid-price</a> and volatility features from 
+partial order book updates, 5 second lookahead label as prediction target, using 1 second granularity data</p>
 <ul>
-<li>Pick existing or define your own <code>FeatureDefinition</code> (see more in Feature Definitions section)</li>
-<li>Create <code>FeaturizerConfig</code><ul>
+<li>
+<p>Pick existing or define your own <code>FeatureDefinition</code> (see <a href="">Feature Definitions</a> section)</p>
+<ul>
+<li>
+<p>Create <code>FeaturizerConfig</code></p>
+<ul>
 <li>Define start and end dates (more in Data Model)</li>
 <li>Pick which features to store by setting <code>to_store</code> (more in Storage)</li>
 <li>Define label feature by setting <code>label_feature_index</code> and <code>label_lookahead</code> (more in Labeling)</li>
-<li>Define features in <code>feature_configs</code>. Each feature is a result of applying <code>feature_params</code> and 
-<code>data_params</code> to <code>FeatureDefinition</code>.</li>
-</ul>
-</li>
+<li>Define features in <code>feature_configs</code>. Each feature is a result of applying <code>params:feature</code> and 
+  <code>params:data_source</code> to <code>FeatureDefinition</code></li>
 </ul>
 <p>Example config:</p>
-<p><code>start_date: '2023-02-01 10:00:00'
-  end_date: '2023-02-01 11:00:00'
-  label_feature_index: 0
-  label_lookahead: '5s'
-  features_to_store: [0, 1]
-  feature_configs:
-    - feature_definition: price.mid_price_fd
-      name: mid_price
-      params:
-        data_source: &amp;id001
-          - exchange: BINANCE
-            instrument_type: spot
-            symbol: BTC-USDT
-        feature:
-          1:
-            dep_schema: cryptotick
-            sampling: 1s
-    - feature_definition: volatility.volatility_stddev_fd
-      data_params: *id001
-      feature_params:
-        2:
-          dep_schema: cryptotick
-          sampling: 1s</code></p>
-<ul>
-<li>Run Featurizer</li>
-<li>CLI: <code>svoe featurizer run &lt;path_to_config&gt;</code></li>
-<li>Python API: <code>Featurizer.run(path='path_to_config')</code></li>
+<p><div class="highlight"><pre><span></span><code>start_date: &#39;2023-02-01 10:00:00&#39;
+end_date: &#39;2023-02-01 11:00:00&#39;
+label_feature_index: 0
+label_lookahead: &#39;5s&#39;
+features_to_store: [0, 1]
+feature_configs:
+  - feature_definition: price.mid_price_fd.MidPriceFD
+    name: mid_price
+    params:
+      data_source: &amp;id001
+        - exchange: BINANCE
+          instrument_type: spot
+          symbol: BTC-USDT
+      feature:
+        sampling: 1s
+  - feature_definition: volatility.volatility_stddev_fd.VolatilityStddevFD
+    params
+      data_source: *id001
+      feature:
+        sampling: 1s
+</code></pre></div>
+See <a href="https://github.com/anovv/svoe/blob/main/featurizer/features/definitions/price/mid_price_fd/mid_price_fd.py">MidPriceFD</a> and <a href="https://github.com/anovv/svoe/blob/main/featurizer/features/definitions/volatility/volatility_stddev_fd/volatility_stddev_fd.py">VolatilityStddevFD</a> for implementation details</p>
+</li>
 </ul>
+</li>
+<li>
+<p>Run Featurizer</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">CLI</label><label for="__tabbed_1_2">Python API</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer run &lt;path_to_config&gt; --ray-address &lt;addr&gt; --parallelism &lt;num-workers&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Featurizer.run(path=&lt;path_to_config&gt;, ray_address=&lt;addr&gt;, parallelism=&lt;num_workers&gt;)
+</code></pre></div>
+</div>
+</div>
+</div>
 <p>Featurizer will compile a graph of tasks, execute it in a distributed manner over the cluster and store
-  the resulted distributed dataframe (FeatureLabelSet) in cluster memory and optionally in persistent storage.
-  The above config will result in following dataframe: </p>
-<p>```
-          timestamp  receipt_timestamp  label_mid_price-mid_price  mid_price-mid_price  feature_VolatilityStddevFD_62271b09-volatility
-  0     1.675234e+09       1.675234e+09                  23084.800            23084.435                                        0.000547
-  1     1.675234e+09       1.675234e+09                  23083.760            23084.355                                        0.040003
-  2     1.675234e+09       1.675234e+09                  23083.505            23084.635                                        0.117757
-  3     1.675234e+09       1.675234e+09                  23084.610            23085.020                                        0.257091
-  4     1.675234e+09       1.675234e+09                  23084.725            23084.800                                        0.242034
-  ...            ...                ...                        ...                  ...                                             ...</p>
-<p>```</p>
+the resulted distributed dataframe (<code>FeatureLabelSet</code>) in cluster memory and optionally in persistent storage.</p>
+</li>
+<li>
+<p>Get sampled results. Once calculation is finished, run following command to get sampled <code>FeatureLabelSet</code> dataframe into your local laptop memory</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer get-data --every-n &lt;every_nth_row&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The above config will result in following dataframe:
+<div class="highlight"><pre><span></span><code>      timestamp  receipt_timestamp  label_mid_price-mid_price  mid_price-mid_price  feature_VolatilityStddevFD_62271b09-volatility
+0     1.675234e+09       1.675234e+09                  23084.800            23084.435                                        0.000547
+1     1.675234e+09       1.675234e+09                  23083.760            23084.355                                        0.040003
+2     1.675234e+09       1.675234e+09                  23083.505            23084.635                                        0.117757
+3     1.675234e+09       1.675234e+09                  23084.610            23085.020                                        0.257091
+4     1.675234e+09       1.675234e+09                  23084.725            23084.800                                        0.242034
+...            ...                ...                        ...                  ...                                             ...
+</code></pre></div></p>
+</li>
+<li>
+<p>Visualize the results</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">CLI</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>svoe featurizer plot --every-n &lt;every_nth_row&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
 
 
 

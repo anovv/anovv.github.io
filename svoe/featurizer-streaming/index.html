@@ -630,6 +630,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -693,6 +713,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trainer-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -747,6 +787,26 @@
   
   <span class="md-ellipsis">
     Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
   </span>
   
 
@@ -856,14 +916,14 @@ between batch and real-time data processing withour changing feature calculation
 <p>For real-time feature calculation and offline simulation, Featurizer provides a set of convenient classes.</p>
 <h2 id="real-time-streaming-with-featurestreamgraph">Real-time streaming with FeatureStreamGraph</h2>
 <p><code>FeatureStreamGraph</code> is a class providing simple way to build a streaming pipeline</p>
-<pre><code>fsg = FeatureStreamGraph(
+<div class="highlight"><pre><span></span><code>fsg = FeatureStreamGraph(
     features_or_config: Union[List[Feature], FeaturizerConfig]=my_features_or_config,
     callback: Callable[[GroupedNamedDataEvent], Any]=mycallback
 )
-</code></pre>
+</code></pre></div>
 <p>To emit events into the graph simply call</p>
-<pre><code>fsg.emit_named_data_event(named_data_event: NamedDataEvent)
-</code></pre>
+<div class="highlight"><pre><span></span><code>fsg.emit_named_data_event(named_data_event: NamedDataEvent)
+</code></pre></div>
 <p>where <code>NamedDataEvent</code> is a tuple of Feature (data source) object and a dict</p>
 <p><code>callback: Callable[[GroupedNamedDataEvent], Any]</code> parameter contains user-defined logic to process newly 
 produced event. <code>GroupedNamedDataEvent</code> describes data events for all features grouped into a single object. 
@@ -875,8 +935,8 @@ a data stream from stored events. Featurizer provides OfflineFeatureStreamGenera
 implements a typical generator interface and can be used to run custom logic over stored
 data stream.</p>
 <p>Work In Progress </p>
-<pre><code>OfflineFeatureStreamGenerator example
-</code></pre>
+<div class="highlight"><pre><span></span><code>OfflineFeatureStreamGenerator example
+</code></pre></div>
 <p>See more in <code>featurizer.feature_stream.offline_feature_stream_generator.py</code></p>
 <h2 id="scalability">Scalability</h2>
 <p>Oftentimes user may want to use configs which calculate thousand , which  . For now Featurizer does not provide (although this is one of the
