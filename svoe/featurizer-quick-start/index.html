@@ -20,7 +20,7 @@
     
     
       
-        <title>Quick Start - Svoe</title>
+        <title>Quick Start - SVOE</title>
       
     
     
@@ -81,7 +81,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Svoe" class="md-header__button md-logo" aria-label="Svoe" data-md-component="logo">
+    <a href=".." title="SVOE" class="md-header__button md-logo" aria-label="SVOE" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -95,7 +95,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Svoe
+            SVOE
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -185,13 +185,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Svoe" class="md-nav__button md-logo" aria-label="Svoe" data-md-component="logo">
+    <a href=".." title="SVOE" class="md-nav__button md-logo" aria-label="SVOE" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
-    Svoe
+    SVOE
   </label>
   
     <div class="md-nav__source">
@@ -729,18 +729,18 @@
 
 <h1 id="featurizer-quick-start">Featurizer Quick Start</h1>
 <ul>
-<li>Pick existing or define your own FeatureDefinition (see more in Feature Definitions section)</li>
-<li>Create Featurizer Config<ul>
+<li>Pick existing or define your own <code>FeatureDefinition</code> (see more in Feature Definitions section)</li>
+<li>Create <code>FeaturizerConfig</code><ul>
 <li>Define start and end dates (more in Data Model)</li>
-<li>Pick which features to store by setting to_store (more in Storage)</li>
-<li>Define label feature by setting lookahead_shift (more in Labeling)</li>
-<li>Define features in feature_configs. Each feature is a result of applying feature_params and data_params 
-  to FeatureDefinition.</li>
+<li>Pick which features to store by setting <code>to_store</code> (more in Storage)</li>
+<li>Define label feature by setting <code>label_feature_index</code> and <code>label_lookahead</code> (more in Labeling)</li>
+<li>Define features in <code>feature_configs</code>. Each feature is a result of applying <code>feature_params</code> and 
+<code>data_params</code> to <code>FeatureDefinition</code>.</li>
 </ul>
 </li>
 </ul>
-<p>Example config:
-  <code>start_date: '2023-02-01 10:00:00'
+<p>Example config:</p>
+<p><code>start_date: '2023-02-01 10:00:00'
   end_date: '2023-02-01 11:00:00'
   label_feature_index: 0
   label_lookahead: '5s'
@@ -762,10 +762,12 @@
       feature_params:
         2:
           dep_schema: cryptotick
-          sampling: 1s</code>
-- Run Featurizer
-  * CLI: <code>svoe featurizer run &lt;path_to_config&gt;</code>
-  * Python API: <code>Featurizer.run(path='path_to_config')</code></p>
+          sampling: 1s</code></p>
+<ul>
+<li>Run Featurizer</li>
+<li>CLI: <code>svoe featurizer run &lt;path_to_config&gt;</code></li>
+<li>Python API: <code>Featurizer.run(path='path_to_config')</code></li>
+</ul>
 <p>Featurizer will compile a graph of tasks, execute it in a distributed manner over the cluster and store
   the resulted distributed dataframe (FeatureLabelSet) in cluster memory and optionally in persistent storage.
   The above config will result in following dataframe: </p>
