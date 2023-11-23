@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../featurizer-data-source-definitions/">
+        <link rel="prev" href="../featurizer-synthetic-data-sources/">
       
       
-        <link rel="next" href="../featurizer-storage/">
+        <link rel="next" href="../featurizer-configuration/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Data Ingest - SVOE</title>
+        <title>Transforms - SVOE</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-ingest-pipeline" class="md-skip">
+        <a href="#feature-transforms" class="md-skip">
           Skip to content
         </a>
       
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Data Ingest
+              Transforms
             
           </span>
         </div>
@@ -452,29 +452,9 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Data Ingest
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../featurizer-data-ingest/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -483,40 +463,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#config" class="md-nav__link">
-    Config
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -626,9 +572,27 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../featurizer-transforms/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Transforms
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -637,6 +601,31 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#feature-transforms" class="md-nav__link">
+    Feature Transforms
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -852,8 +841,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -862,15 +849,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#config" class="md-nav__link">
-    Config
+  <a href="#feature-transforms" class="md-nav__link">
+    Feature Transforms
   </a>
   
 </li>
@@ -893,33 +873,10 @@
   
 
 
-<h1 id="data-ingest-pipeline">Data Ingest Pipeline</h1>
-<p>To get input data into SVOE, Featurizer provides two main methods: <strong><a href="https://anovv.github.io/svoe/featurizer-data-ingest/">Data Ingest Pipeline</a></strong> and <strong><a href="https://anovv.github.io/svoe/featurizer-real-time-data-recording/">Real Time Data Recording</a></strong>.
-This section will describe the former.</p>
-<p>Featurizer provides a scalable, configurable and extensible data ingest pipeline
-which takes (offline) raw user data and puts it in Featurizer storage. It takes care of such
-things as indexing, compaction, per-data type resource allocation for pipeline workers and many other data
-engineering related problems. It integrates with DataSourceDefinition class so users
-can easily add their own processing logic in a modular way without spinning up and maintaining
-data engineering infrastructure.</p>
-<h2 id="usage">Usage</h2>
-<ul>
-<li>CLI: <code>svoe featurizer run-data-ingest &lt;path_to_config&gt;</code></li>
-<li>API: <code>FeaturizerDataIngestPipelineRunner.run(path_to_config)</code></li>
-</ul>
-<h2 id="config">Config</h2>
-<p>TODO describe options</p>
-<div class="highlight"><pre><span></span><code>provider_name: cryptotick
-batch_size: 12
-max_executing_tasks: 10
-data_source_files:
-  - data_source_definition: featurizer.data_definitions.common.l2_book_incremental.cryptotick.cryptotick_l2_book_incremental.CryptotickL2BookIncrementalData
-    files_and_sizes:
-      - [&#39;limitbook_full/20230201/BINANCE_SPOT_BTC_USDT.csv.gz&#39;, 252000]
-      - [&#39;limitbook_full/20230202/BINANCE_SPOT_BTC_USDT.csv.gz&#39;, 252000]
-      - [&#39;limitbook_full/20230203/BINANCE_SPOT_BTC_USDT.csv.gz&#39;, 252000]
-      - [&#39;limitbook_full/20230204/BINANCE_SPOT_BTC_USDT.csv.gz&#39;, 252000]
-</code></pre></div>
+  <h1>Transforms</h1>
+
+<h2 id="feature-transforms">Feature Transforms</h2>
+<p>WIP</p>
 
 
 

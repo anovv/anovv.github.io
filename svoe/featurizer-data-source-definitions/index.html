@@ -565,7 +565,27 @@
         
   
   <span class="md-ellipsis">
-    Real-time data and Streaming
+    Real-time Data and Streaming
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-real-time-data-recording/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Real-time Data Recording
   </span>
   
 
@@ -586,6 +606,26 @@
   
   <span class="md-ellipsis">
     Synthetic Data Sources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-transforms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transforms
   </span>
   
 
@@ -858,9 +898,31 @@ event schema, possible preprocessing steps and other info. Let's take a look at 
         # Any preprocessing logic to get a sequence of EventSchema-like
         # records in a form of a DataFrame from raw data (raw_df)
         raise NotImplemented
+
+    @classmethod
+    def event_emitter_type(cls) -&gt; Type[DataSourceEventEmitter]:
+        # provides DataSourceEventEmitter type associated with this data source
+        raise NotImplemented
 </code></pre></div>
-<p>See CryptotickL2BookIncrementalData for an example of a data source representing 
-incremental order book updates from Cryptotick data provider.</p>
+<p>Some examples of common data source definitions</p>
+<ul>
+<li>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/data_definitions/common/l2_book_incremental/cryptotick/cryptotick_l2_book_incremental.py">CryptotickL2BookIncrementalData</a> - incremental updates for L2 orderbook from <a href="https://www.cryptotick.com/">Cryptotick</a> data provider</p>
+</li>
+<li>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/data_definitions/common/l2_book_incremental/cryptofeed/cryptofeed_l2_book_incremental.py">CryptofeedL2BookIncrementalData</a> - incremental updates for L2 orderbook from <a href="https://github.com/bmoscon/cryptofeed">Cryptofeed</a> library</p>
+</li>
+<li>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/data_definitions/common/ticker/cryptofeed/cryptofeed_ticker.py">CryptofeedTickerData</a> - Cryptofeed ticker</p>
+</li>
+<li>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/data_definitions/common/trades/cryptotick/cryptotick_trades.py">CryptotickTradesData</a> - Cryptotick trades</p>
+</li>
+<li>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/data_definitions/common/trades/cryptofeed/cryptofeed_trades.py">CryptofeedTradesData</a> - Cryptofeed trades</p>
+</li>
+</ul>
+<p>See <a href="https://anovv.github.io/svoe/featurizer-streaming/">Featurizer Real Time Streaming</a> for Event Emitter details</p>
 
 
 

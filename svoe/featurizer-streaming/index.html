@@ -12,7 +12,7 @@
         <link rel="prev" href="../featurizer-task-graph/">
       
       
-        <link rel="next" href="../featurizer-synthetic-data-sources/">
+        <link rel="next" href="../featurizer-real-time-data-recording/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Real-time data and Streaming - SVOE</title>
+        <title>Real-time Data and Streaming - SVOE</title>
       
     
     
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Real-time data and Streaming
+              Real-time Data and Streaming
             
           </span>
         </div>
@@ -527,7 +527,7 @@
           
   
   <span class="md-ellipsis">
-    Real-time data and Streaming
+    Real-time Data and Streaming
   </span>
   
 
@@ -538,7 +538,7 @@
         
   
   <span class="md-ellipsis">
-    Real-time data and Streaming
+    Real-time Data and Streaming
   </span>
   
 
@@ -567,8 +567,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#real-time-streaming-with-featurestreamgraph" class="md-nav__link">
-    Real-time streaming with FeatureStreamGraph
+  <a href="#event-emitters" class="md-nav__link">
+    Event Emitters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#featurestreamgraph" class="md-nav__link">
+    FeatureStreamGraph
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-recording" class="md-nav__link">
+    Data Recording
   </a>
   
 </li>
@@ -616,11 +630,51 @@
   
   
     <li class="md-nav__item">
+      <a href="../featurizer-real-time-data-recording/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Real-time Data Recording
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../featurizer-synthetic-data-sources/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Synthetic Data Sources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../featurizer-transforms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transforms
   </span>
   
 
@@ -857,8 +911,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#real-time-streaming-with-featurestreamgraph" class="md-nav__link">
-    Real-time streaming with FeatureStreamGraph
+  <a href="#event-emitters" class="md-nav__link">
+    Event Emitters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#featurestreamgraph" class="md-nav__link">
+    FeatureStreamGraph
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-recording" class="md-nav__link">
+    Data Recording
   </a>
   
 </li>
@@ -912,35 +980,96 @@
 <h1 id="featurizer-real-time-streaming">Featurizer Real Time Streaming</h1>
 <h2 id="overview">Overview</h2>
 <p>One of the most powerful tools of Featurizer is the ability to seamlessly switch
-between batch and real-time data processing withour changing feature calculation code.</p>
-<p>For real-time feature calculation and offline simulation, Featurizer provides a set of convenient classes.</p>
-<h2 id="real-time-streaming-with-featurestreamgraph">Real-time streaming with FeatureStreamGraph</h2>
-<p><code>FeatureStreamGraph</code> is a class providing simple way to build a streaming pipeline</p>
+between batch and real-time data processing without changing feature calculation code.</p>
+<p>Featurizer provides a set of user-facing classes to build, launch and scale real-time streaming pipelines.
+It is built using <strong><a href="https://github.com/python-streamz/streamz">Streamz</a></strong> library to declaratively define event processing logic and 
+<strong><a href="https://docs.ray.io/en/latest/ray-core/actors.html">Ray Actors</a></strong> to scale the workload across cluster/CPUs.</p>
+<h2 id="event-emitters">Event Emitters</h2>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/feature_stream/event_emitter/data_source_event_emitter.py"><code>DataSourceEventEmitter</code></a> is a foundation of any streaming pipeline. Users define logic to emit <code>Event</code> objects and how to
+register an arbitrary callback per feature. When building a pipeline from config, Featurizer automatically 
+registers all necessary callbacks to connect dependent Features and calculation nodes (in case of a
+distributed run)</p>
+<div class="highlight"><pre><span></span><code>class DataSourceEventEmitter:
+
+    @classmethod
+    def instance(cls) -&gt; &#39;DataSourceEventEmitter&#39;:
+        raise NotImplementedError
+
+    def register_callback(self, feature: Feature, callback: Callable[[Feature, Event], Optional[Any]]):
+        raise NotImplementedError
+
+    def start(self):
+        raise NotImplementedError
+
+    def stop(self):
+        raise NotImplementedError
+</code></pre></div>
+<p>By default, Featurizer uses <a href="https://github.com/anovv/svoe/blob/main/featurizer/feature_stream/event_emitter/cryptofeed_event_emitter.py"><code>CryptofeedEventEmitter</code></a>
+which is based on a popular <strong><a href="https://github.com/bmoscon/cryptofeed">Cryptofeed</a></strong> library.</p>
+<h2 id="featurestreamgraph">FeatureStreamGraph</h2>
+<p><a href="https://github.com/anovv/svoe/blob/main/featurizer/feature_stream/feature_stream_graph.py"><code>FeatureStreamGraph</code></a> 
+is a class providing simple way to build a streaming pipeline in a non-distributed setting (i.e 1 worker)</p>
 <div class="highlight"><pre><span></span><code>fsg = FeatureStreamGraph(
-    features_or_config: Union[List[Feature], FeaturizerConfig]=my_features_or_config,
-    callback: Callable[[GroupedNamedDataEvent], Any]=mycallback
+    features_or_config: Union[List[Feature], FeaturizerConfig],
+    combine_outputs: bool = False,
+    combined_out_callback: Optional[Callable[[GroupedNamedDataEvent], Any]] = None
 )
 </code></pre></div>
-<p>To emit events into the graph simply call</p>
-<div class="highlight"><pre><span></span><code>fsg.emit_named_data_event(named_data_event: NamedDataEvent)
-</code></pre></div>
-<p>where <code>NamedDataEvent</code> is a tuple of Feature (data source) object and a dict</p>
-<p><code>callback: Callable[[GroupedNamedDataEvent], Any]</code> parameter contains user-defined logic to process newly 
-produced event. <code>GroupedNamedDataEvent</code> describes data events for all features grouped into a single object. 
+<p>It uses <strong><a href="https://github.com/python-streamz/streamz">Streamz</a></strong> library to connect Stream objects into a graph.</p>
+<ul>
+<li>
+<p><code>combine_outputs</code> defines whether output Feature streams should be merged into one</p>
+</li>
+<li>
+<p>If <code>combine_outputs is True</code>, <code>combined_out_callback: Callable[[GroupedNamedDataEvent], Any]</code> parameter 
+contains user-defined logic to process newly produced combined event. 
+<code>GroupedNamedDataEvent</code> describes data events for all features grouped into a single object. 
 This is useful for real-time ML inference, where models expect all feature values in a single request</p>
-<p>See more in <code>featurizer.feature_stream.feature_stream_graph.py</code></p>
+</li>
+</ul>
+<p>There are a number of useful methods to build custom pipelines:</p>
+<ul>
+<li>
+<p><code>def emit_named_data_event(self, named_event: NamedDataEvent)</code></p>
+<p>Emits new event into the graph</p>
+</li>
+<li>
+<p><code>def set_callback(self, feature: Feature, callback: Callable[[Feature, Event], Optional[Any]])</code></p>
+<p>Sets custom callback per feature event</p>
+</li>
+<li>
+<p><code>def get_ins(self) -&gt; List[Feature]</code></p>
+<p>Lists input feature streams</p>
+</li>
+<li>
+<p><code>def get_outs(self) -&gt; List[Feature]</code></p>
+<p>Lists output feature streams</p>
+</li>
+<li>
+<p><code>def get_stream(self, feature: Feature) -&gt; Stream</code></p>
+<p>Gets stream for feature</p>
+</li>
+</ul>
+<p>When initialized with a <code>FeaturizerConfig</code>, Featurizer automatically builds necessary <code>FeatureStreamGraph</code> objects and
+connects them with corresponding Event Emitters/ </p>
+<h2 id="data-recording">Data Recording</h2>
+<p>Users can configure Featurizer to store features/data sources events to Featurizer Storage for further processing.
+See <strong><a href="https://anovv.github.io/svoe/featurizer-real-time-data-recording/">Featurizer Real Time Data Recording</a></strong>.</p>
 <h2 id="simulating-real-time-stream-from-offline-data-with-offlinefeaturestreamgenerator">Simulating real-time stream from offline data with OfflineFeatureStreamGenerator</h2>
 <p>For backtesting/simulation/ML model validation purposes, we often need to be able to simulate
 a data stream from stored events. Featurizer provides OfflineFeatureStreamGenerator class, which
 implements a typical generator interface and can be used to run custom logic over stored
 data stream.</p>
-<p>Work In Progress </p>
+<p>Work In Progress (make OfflineFeatureEventEmitter)</p>
 <div class="highlight"><pre><span></span><code>OfflineFeatureStreamGenerator example
 </code></pre></div>
 <p>See more in <code>featurizer.feature_stream.offline_feature_stream_generator.py</code></p>
 <h2 id="scalability">Scalability</h2>
-<p>Oftentimes user may want to use configs which calculate thousand , which  . For now Featurizer does not provide (although this is one of the
-highest )</p>
+<p>WIP</p>
+<p><code>FeatureStreamWorkerGraph</code></p>
+<p><code>ScalingStrategy</code></p>
+<p><code>FeaturizerStreamWorkerActor</code> and <code>FeaturizerStreamManagerActor</code></p>
+<p><code>Transport</code></p>
 <h2 id="fault-tolerance">Fault Tolerance</h2>
 <p>Work In Progress</p>
 <h2 id="visualization">Visualization</h2>
