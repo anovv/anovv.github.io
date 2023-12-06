@@ -622,6 +622,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-new-transforms" class="md-nav__link">
+    Creating new transforms
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -817,6 +824,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-inference-loop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inference Loop
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -855,6 +882,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-new-transforms" class="md-nav__link">
+    Creating new transforms
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -876,6 +910,29 @@
   <h1>Transforms</h1>
 
 <h2 id="feature-transforms">Feature Transforms</h2>
+<p>Featurizer provides a set of built-in operators for common transformations on time-series data called <strong>Transforms</strong></p>
+<p>Some examples are:</p>
+<ul>
+<li><strong><a href="https://github.com/anovv/svoe/blob/main/featurizer/features/definitions/transforms/diff/diff.py">diff</a></strong> - transforms time-series into a series of differences between sequential events</li>
+<li><strong><a href="WIP">min_max_scaling</a></strong> - scales values between 0 and 1 based on min and max value in a window</li>
+<li><strong><a href="WIP">ewma</a></strong> - exponential smoothing</li>
+</ul>
+<p>Transforms are similar to regular FeatureDefinitions when coming to definition (they subclass <code>FeatureDefinition</code>), however
+differ in how they are used in <code>FeaturizerConfig</code>: unlike regular <code>FeatureDefinition</code> which do not need direct specification
+of dependant features (they are constructed automatically), Transforms require specific definition of dependencies:</p>
+<div class="highlight"><pre><span></span><code>feature_configs:
+  - feature_definition: transforms.diff
+    name: diff_mid_price
+    deps:
+      - mid_price
+    params:
+        ...
+  - feature_definition: price.mid_price
+    name: mid_price
+    params:
+        ...
+</code></pre></div>
+<h2 id="creating-new-transforms">Creating new transforms</h2>
 <p>WIP</p>
 
 

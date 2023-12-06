@@ -777,6 +777,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-inference-loop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inference Loop
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -970,24 +990,25 @@ trainer_manager.run(trainer_run_id=&#39;sample-run-id&#39;, tags={})
 </ul>
 </li>
 <li>
-<p>Once we have our best model, we can plug it in our <code>BaseStrategy</code> derived class and run <strong><em><a href="https://anovv.github.io/svoe/backtester-overview/">Backtester</a></em></strong></p>
+<p>In this example, we use <strong><em><a href="https://anovv.github.io/svoe/backtester-overview/">Backtester</a></em></strong> in the context of financial markets, hence our user-defined logic is based on a notion of trading strategy. This can be extended to any other scenario which user wants to emulate. Once we have our best model, we can plug it in our <code>BaseStrategy</code> derived class and run <strong><em><a href="https://anovv.github.io/svoe/backtester-overview/">Backtester</a></em></strong></p>
 <ul>
 <li>
 <p>Define config
   <div class="highlight"><pre><span></span><code>featurizer_config_path: featurizer-config.yaml
-portfolio_config: &lt;portfolio_config&gt;
 inference_config:
   model_uri: &lt;your-best-model-uri&gt;
   predictor_class_name: &#39;XGBoostPredictor&#39;
   num_replicas: &lt;number-of-predictor-replicas&gt; 
-tradable_instruments_params:
-- exchange: &#39;BINANCE&#39;
-  instrument_type: &#39;spot&#39;
-  symbol: &#39;BTC-USDT&#39;
-strategy_class_name: &#39;backtester.strategy.ml_strategy.MLStrategy&#39;
-strategy_params:
+simulation_class_name: &#39;backtester.strategy.ml_strategy.MLStrategy&#39;
+simulation_params:
   buy_delta: 0
   sell_delta: 0
+user_defined_params:
+  portfolio_config: &lt;portfolio_config&gt;
+  tradable_instruments_params:
+    - exchange: &#39;BINANCE&#39;
+      instrument_type: &#39;spot&#39;
+      symbol: &#39;BTC-USDT&#39;
 </code></pre></div>
 See <a href="https://github.com/anovv/svoe/blob/main/backtester/strategy/ml_strategy.py">MLStrategy</a> for example implementation</p>
 </li>

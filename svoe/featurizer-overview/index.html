@@ -835,6 +835,26 @@
 
               
             
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backtester-inference-loop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inference Loop
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -909,7 +929,7 @@
 
 <h1 id="featurizer">Featurizer</h1>
 <h2 id="overview">Overview</h2>
-<p>Featurizer is a framework which combines feature storage, feature calculation engine and user facing
+<p>Featurizer is a framework which combines feature storage, stream processing engine and user facing
 SDKs and configs to define features for real-time and batch (historical) processing on time series data.
 It is build on top of Ray and leverages Ray's distributed memory to produce feature sets/feature-lable sets for
 ML training.</p>
@@ -917,11 +937,12 @@ ML training.</p>
 <ul>
 <li>Flexible computation model: define modular FeatureDefinition’s to calculate features on historical data as well as live data streams using the same code</li>
 <li>High configurability: Define yaml configs to produce feature sets/feature-label sets for unsupervised/supervised learning and analysis</li>
-<li>Scalable execution: Built on top of Ray, Featurizer allows for horizontally scalable feature calculations on historical data</li>
+<li>Scalable execution: Built on top of Ray, Featurizer allows for horizontally scalable stream processing and feature calculations on historical data</li>
 <li>Scalable data storage: Unified data model and data access API for time-series data sources and user defined features allows for easy data discovery and retrieval</li>
-<li>Zero-copy in-memory data access : Featurizer integrates with Ray’s distributed in-memory storage, allowing to use Ray’s distributed ML frameworks (XGBoost, PyTorch, RLLib) for predictive modelling without moving data to the third party storage</li>
+<li>Zero-copy in-memory data access: Featurizer integrates with Ray’s distributed in-memory storage, allowing to use Ray’s distributed ML frameworks (XGBoost, PyTorch, RLLib) for predictive modelling without moving data to the third party storage</li>
 </ul>
 <h2 id="how-is-it-different-from-other-stream-processors-flink-spark-streaming">How is it different from other stream processors (Flink, Spark Streaming)?</h2>
+<p>WIP</p>
 
 
 
