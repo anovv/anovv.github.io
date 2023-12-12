@@ -587,6 +587,26 @@
   
   
     <li class="md-nav__item">
+      <a href="featurizer-inference-loop/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Real-time Inference Loop
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
       <a href="featurizer-real-time-data-recording/" class="md-nav__link">
         
   
@@ -827,26 +847,6 @@
 
               
             
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="backtester-inference-loop/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Inference Loop
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -927,7 +927,7 @@ custom pipelines from multi-core laptop to a cluster of 1000s of nodes.</p>
 <p><strong>SVOE</strong> was originally built to accommodate a typical financial data research workflow (i.e. for Quant Researchers) with 
 specific data models in mind (trades, quotes, order book updates, etc., hence some examples are provided in this domain), 
 however the framework itself is domain-agnostic and it's components can easily be generalised and used in other fields 
-which rely on real-time time-series based data processing and simulation (fraud/anomaly detection, sales forecasting etc.)</p>
+which rely on real-time time-series based data processing and simulation (anomaly detection, sales forecasting etc.)</p>
 <p><img alt="diagram" src="img/svoe_diagram.png" /></p>
 <h2 id="how-does-it-work"><em>How does it work?</em></h2>
 <p>SVOE consists of three main components, each providing a set of tools for a typical Quant/ML engineer workflow</p>
@@ -952,6 +952,7 @@ to easily run your experiments</li>
 <li><strong><em>Cloud / Kubernetes ready</em></strong> - use <strong>KubeRay</strong> or native <strong>Ray on AWS</strong> to scale out your workloads in a cloud</li>
 <li><strong><em>Easily integrates with orchestrators (Airflow, Luigi, Prefect)</em></strong> - SVOE provides basic <strong><a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html">Airflow Operators</a></strong>
 for each component to easily orchestrate your workflows</li>
+<li><strong><em>Real-time inference without MLOps burden</em></strong> - no need to maintain model containerization pipelines, FastAPI services and model registries. Deploy with simple Python API or yaml using <strong><a href="https://anovv.github.io/svoe/featurizer-inference-loop/">InferenceLoop</a></strong></li>
 <li><strong><em>Designed for high volume low granularity data</em></strong> - as an example, when used in financial domain, unlike existing financial ML frameworks which use only OHLCV
 as a base data model, SVOE's <strong><a href="https://anovv.github.io/svoe/featurizer-overview/">Featurizer</a></strong> provides flexible tools to use and customize any data source (ticks, trades, book updates, etc.)
 and build streaming and historical features</li>

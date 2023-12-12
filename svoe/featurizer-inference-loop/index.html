@@ -9,8 +9,10 @@
       
       
       
-        <link rel="prev" href="../backtester-quick-start/">
+        <link rel="prev" href="../featurizer-streaming/">
       
+      
+        <link rel="next" href="../featurizer-real-time-data-recording/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -18,7 +20,7 @@
     
     
       
-        <title>Inference Loop - SVOE</title>
+        <title>Real-time Inference Loop - SVOE</title>
       
     
     
@@ -63,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#inference-loop" class="md-skip">
+        <a href="#real-time-model-inference-with-inference-loop" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Inference Loop
+              Real-time Inference Loop
             
           </span>
         </div>
@@ -332,18 +334,20 @@
       
   
   
+    
+  
   
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -357,7 +361,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Featurizer
@@ -519,6 +523,36 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Real-time Inference Loop
+  </span>
+  
+
+      </a>
+      
     </li>
   
 
@@ -698,20 +732,18 @@
       
   
   
-    
-  
   
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -725,7 +757,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Backtester
@@ -767,36 +799,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    Inference Loop
-  </span>
-  
-
-      </a>
-      
     </li>
   
 
@@ -845,7 +847,57 @@
   
 
 
-<h1 id="inference-loop">Inference Loop</h1>
+<h1 id="real-time-model-inference-with-inference-loop">Real-time model inference with Inference Loop</h1>
+<p>Featurizer utilizes <strong><a href="https://docs.ray.io/en/latest/serve/index.html">Ray Serve</a></strong> to help
+users do real-time inference and provides an <code>InferenceLoop</code> abstraction to do asynchronous
+inference on streaming data.</p>
+<p>This allows to bypass a typical MLOps approach of creating Docker containers and FastAPI services and all the burden of maintaining relevant infrastructure.</p>
+<h1 id="inferenceloop">InferenceLoop</h1>
+<p><a href="https://github.com/anovv/svoe/blob/main/backtester/inference/inference_loop.py"><code>InferenceLoop</code></a> is a class providing a mechanism
+for continuous model polling and latest request result storage for downstream processing. 
+In a nutshell it is a separate actor/process that continuously sends requests to a model and outputs last results. 
+When used in offline mode, users can provide <code>Clock</code> instance to synchronize time between
+Featurizer event processing pipelines and inference.</p>
+<p>Some notable benefits of this approach:</p>
+<ul>
+<li>No need to maintain model containerization pipelines, FastAPI services and model registries. Deploy with simple Python API or yaml</li>
+<li>Integration with MLFlow</li>
+<li>Asynchronous inference allows for real-time processing without blocking on model-related calculations </li>
+<li>Scalable inference using adjustable <code>num_replicas</code>, indicating number of inference workers</li>
+<li>Decouples event processing and inference</li>
+<li>Use of special hardware (i.e. GPUs)</li>
+</ul>
+<h1 id="inference-configuration">Inference Configuration</h1>
+<p>When running an <code>InferenceLoop</code> in different scenarios (real-time Featurizer pipeline or Backtester),
+users can configure certain options</p>
+<ul>
+<li><code>deployment_name</code> - optional Ray Serve Deployment name</li>
+<li><code>model_uri</code> - path to model's artifacts as stored in MLFlow artifact storage</li>
+<li><code>predictor_class_name</code> - Ray Serve predictor type (ex. <code>XGBoostPredictor</code>)</li>
+<li><code>num_replicas</code> - number of Inference Actors to be used for this loop. Requests to workers are evenly
+distributed (i.e. round-robin) via http-proxy actor</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">InferenceConfig</label><label for="__tabbed_1_2">YAML</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>class InferenceConfig(BaseModel):
+    deployment_name: Optional[str]
+    model_uri: str
+    predictor_class_name: str
+    num_replicas: int
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>...
+inference_config:
+  model_uri: &lt;your-best-model-uri&gt;
+  predictor_class_name: &#39;XGBoostPredictor&#39;
+  num_replicas: &lt;number-of-predictor-replicas&gt;
+...
+</code></pre></div>
+</div>
+</div>
+</div>
 
 
 
