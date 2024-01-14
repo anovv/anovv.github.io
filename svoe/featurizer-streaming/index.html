@@ -1014,7 +1014,9 @@
 <h1 id="featurizer-real-time-streaming">Featurizer Real Time Streaming</h1>
 <h2 id="overview">Overview</h2>
 <p>One of the most powerful tools of Featurizer is the ability to seamlessly switch
-between batch and real-time data processing without changing feature calculation code.</p>
+between batch and real-time data processing without changing feature calculation code.
+Featurizer is built around a custom stream processing engine (built on top of Ray Actors and ZeroMQ)
+and uses Kappa-architecture to calculate offline features using online pipelines.</p>
 <p>Featurizer provides a set of user-facing classes to build, launch and scale real-time streaming pipelines.
 It is built using <strong><a href="https://github.com/python-streamz/streamz">Streamz</a></strong> library to declaratively define event processing logic and 
 <strong><a href="https://docs.ray.io/en/latest/ray-core/actors.html">Ray Actors</a></strong> to scale the workload across cluster/CPUs.</p>
